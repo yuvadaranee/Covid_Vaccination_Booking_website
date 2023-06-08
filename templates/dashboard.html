@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+    
+</head>
+<body>
+    <h1>User Dashboard</h1>
+    <p class='welcome'>Welcome, {{ user.username }}!</p>
+
+    <h2>Booked Slots</h2>
+
+    <table border = 6 class = 'table'>
+        <tr>
+            <th>Registration No.</th>
+            <th>User</th>
+            <th>Location</th>
+            <th>Centre</th>
+            <th>Date</th>
+            <th>Slot</th>
+            <th>Status</th>
+        </tr>
+
+         {% for booking in bookings%}
+         {% if booking.user == user.username %}
+         <tr> 
+         <td>{{ booking.hash }}</td>
+          <td>{{ booking.user }}</td>
+          <td>{{ booking.location }}</td>
+          <td>{{ booking.centre }}</td>
+          <td>{{ booking.date }}</td>
+          <td>{{ booking.slot }}</td>
+          <td>{{ booking.status }}</td>
+         </tr>
+            {% endif %} 
+          {% endfor %} 
+
+    </table>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    
+    <h2>Vaccination Booking</h2>
+
+    <p>Filter by:</p>
+    <form action="/filter" method="POST">
+        <select id="filter_loc" name="filter_loc">
+            <option value="">Location</option>
+            {% for filter_center in filter_centers %}
+            <option value="{{filter_center.location}}">{{filter_center.location}}</option>
+            {% endfor %} 
+            <option value="all">All</option>
+        </select>
+        <input type="submit" value="filter">
+    </form>
+
+    <br><br>
+    <table border = 6 class = 'book_table'>
+        <tr>
+            <th>Centre</th>
+            <th>Location</th>
+            <th>From Time</th>
+            <th>To Time</th>
+            <th>Booking Date</th>
+            <th>Booking Time</th>
+            <th>Booking</th>
+        </tr>
+    
+        {% for center in centers %}
+        <tr>
+            <td>{{ center.name }}</td> <td>{{ center.location }}</td> <td> {{center.from_time}}</td> <td> {{center.to_time}}</td>
+                <form method="POST" action="/booking">
+                    <input type="hidden" id="book_user" name="book_user" value="{{user.username}}">
+                    <input type="hidden" id="book_id" name="book_id" value="{{center._id}}">
+                    <input type="hidden" id="book_name" name="book_name" value="{{center.name}}">
+                    <input type="hidden" id="book_location" name="book_location" value="{{center.location}}">
+                    <input type="hidden" id="book_centre" name="book_centre" value="{{center.name}}">
+                  <td>  <input type="date" id="book_date" name="book_date"> </td>
+                  <td>  <select id="book_slot" name="book_slot">
+                        <option value="">Choose your slot</option>
+                        <option value="7.00 AM-8.00 AM">7.00 AM-8.00 AM</option>
+                        <option value="9.00 AM-10.00 AM">9.00 AM-10.00 AM</option>
+                        <option value="10.00 AM-11.00 AM">10.00 AM-11.00 AM</option>
+                        <option value="11.00 AM-12.00 PM">11.00 AM-12.00 PM</option>
+                        <option value="1.00 PM-2.00 PM">1.00 PM-2.00 PM</option>
+                        <option value="2.00 PM-3.00 PM">2.00 PM-3.00 PM</option>
+                        <option value="3.00 PM-4.00 PM">3.00 PM-4.00 PM</option>
+                        <option value="4.00 PM-5.00 PM">4.00 PM-5.00 PM</option>
+                        <option value="6.00 PM-7.00 PM">6.00 PM-7.00 PM</option>
+                        <option value="7.00 PM-8.00 PM">7.00 PM-8.00 PM</option>
+                    </select> </td>
+                  <td>  <input type="submit" value="Book"> </td>
+                </form>
+        </tr>   
+        {% endfor %}
+    
+
+
+    <a class='logout' href="{{url_for('logout')}}">Logout</a>
+</body>
+</html>
+
+
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        color: #666666;
+    }
+
+    h2 {
+        color: #666666;
+    }
+
+    .welcome{
+        text-align: center;
+        font-size: 20px;
+        color: #666666;
+    }
+
+    p {
+        color: #666666;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        padding: 8px;
+        margin-bottom: 7px;
+        background-color: #ffffff;
+        color: #666666;
+        border-radius: 5px;
+    }
+
+    table {
+        padding: 8px;
+        margin-bottom: 7px;
+        margin-left: 35px;
+        background-color: #ffffff;
+        color: black;
+        border-radius: 5px;
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 95%;
+        text-align: center;
+    }
+
+    a {
+        color: #666666;
+    }
+
+    .logout {
+        
+        font-size: 17px;
+        color: #666666;
+        top: 9%;
+        left: 95%;
+        position: absolute;
+        hover: #ffffff;
+    }
+
+</style>
